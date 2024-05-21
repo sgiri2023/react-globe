@@ -1,12 +1,13 @@
 import React from "react";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { COUNTRIES_DATA, INDIA_DATA } from "./Data/countriesData";
-import HEX_DATA from "./Data/countriesHexData.json";
+import { INDIA_DATA } from "./Data/countriesData";
+// import HEX_DATA from "./Data/countriesHexData.json";
 import Globe from "react-globe.gl";
+import * as THREE from "//unpkg.com/three/build/three.module.js";
 
-const getRandomCountry = () => {
-  return COUNTRIES_DATA[Math.floor(Math.random() * COUNTRIES_DATA.length)];
-};
+// const getRandomCountry = () => {
+//   return COUNTRIES_DATA[Math.floor(Math.random() * COUNTRIES_DATA.length)];
+// };
 
 export default function CustomGlobe() {
   const globeEl = useRef();
@@ -19,36 +20,62 @@ export default function CustomGlobe() {
   const [hex, setHex] = useState({ features: [] });
 
   useEffect(() => {
-    setHex(HEX_DATA);
-  }, []);
+    const globe = globeEl.current;
 
-  useEffect(() => {
-    let interval;
+    // Auto-rotate
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.35;
 
-    interval = setInterval(() => {
-      (async () => {
-        const country = INDIA_DATA[0];
-        setSelectedCountry({
-          lat: country.latitude,
-          lng: country.longitude,
-          label: country.name,
-        });
+    // Add clouds sphere
+    const CLOUDS_IMG_URL = "./clouds.png"; // from https://github.com/turban/webgl-earth
+    const CLOUDS_ALT = 0.004;
+    const CLOUDS_ROTATION_SPEED = -0.006; // deg/frame
+
+    new THREE.TextureLoader().load(CLOUDS_IMG_URL, (cloudsTexture) => {
+      const clouds = new THREE.Mesh(
+        new THREE.SphereGeometry(globe.getGlobeRadius() * (1 + CLOUDS_ALT), 75, 75),
+        new THREE.MeshPhongMaterial({ map: cloudsTexture, transparent: true })
+      );
+      globe.scene().add(clouds);
+
+      (function rotateClouds() {
+        clouds.rotation.y += (CLOUDS_ROTATION_SPEED * Math.PI) / 180;
+        requestAnimationFrame(rotateClouds);
       })();
-    }, 3000); //Every 3 seconds
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
+    });
   }, []);
 
-  useEffect(() => {
-    // globeEl.current.controls().autoRotate = true;
-    // globeEl.current.controls().autoRotateSpeed = 0.2;
+  // useEffect(() => {
+  //   setHex(HEX_DATA);
+  // }, []);
 
-    const MAP_CENTER = { lat: 0, lng: 0, altitude: 1.5 };
-    globeEl.current.pointOfView(MAP_CENTER, 0);
-  }, [globeEl]);
+  // useEffect(() => {
+  //   let interval;
+
+  //   interval = setInterval(() => {
+  //     (async () => {
+  //       const country = INDIA_DATA[0];
+  //       setSelectedCountry({
+  //         lat: country.latitude,
+  //         lng: country.longitude,
+  //         label: country.name,
+  //       });
+  //     })();
+  //   }, 3000); //Every 3 seconds
+  //   return () => {
+  //     if (interval) {
+  //       clearInterval(interval);
+  //     }
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   // globeEl.current.controls().autoRotate = true;
+  //   // globeEl.current.controls().autoRotateSpeed = 0.2;
+
+  //   const MAP_CENTER = { lat: 0, lng: 0, altitude: 1.5 };
+  //   globeEl.current.pointOfView(MAP_CENTER, 0);
+  // }, [globeEl]);
 
   useEffect(() => {
     const countryLocation = {
