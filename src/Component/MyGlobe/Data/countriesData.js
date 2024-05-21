@@ -5,7 +5,35 @@ export const INDIA_DATA = [
     longitude: 78.96288,
     name: "India, Saurav",
   },
+  {
+    country: "AE",
+    latitude: 23.424076,
+    longitude: 53.847818,
+    name: "United Arab Emirates",
+  },
 ];
+
+export const GLOBE_DATA = [
+  {
+    country: "IN",
+    lat: 20.593684,
+    lng: 78.96288,
+    label: "India, Saurav",
+  },
+  {
+    country: "AE",
+    lat: 23.424076,
+    lng: 53.847818,
+    label: "United Arab Emirates",
+  },
+  {
+    country: "BD",
+    lat: 23.684994,
+    lng: 90.356331,
+    label: "Bangladesh",
+  },
+];
+
 export const COUNTRIES_DATA = [
   {
     country: "AE",

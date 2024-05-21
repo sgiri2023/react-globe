@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { INDIA_DATA } from "./Data/countriesData";
+import { INDIA_DATA, COUNTRIES_DATA, GLOBE_DATA } from "./Data/countriesData";
 // import HEX_DATA from "./Data/countriesHexData.json";
 import Globe from "react-globe.gl";
 import * as THREE from "//unpkg.com/three/build/three.module.js";
@@ -16,6 +16,12 @@ export default function CustomGlobe() {
     lat: country.latitude,
     lng: country.longitude,
     label: country.name,
+  });
+  const countryTwo = INDIA_DATA[1];
+  const [selectedCountryTwo, setSelectedCountryTwo] = useState({
+    lat: countryTwo.latitude,
+    lng: countryTwo.longitude,
+    label: countryTwo.name,
   });
   const [hex, setHex] = useState({ features: [] });
 
@@ -89,25 +95,25 @@ export default function CustomGlobe() {
 
   return (
     <Globe
-      // ref={globeEl}
-      // backgroundColor="rgba(150,0,0,0)"
-      // labelsData={[selectedCountry]}
-      // labelText={"label"}
-      // labelSize={1.6}
-      // labelColor={() => "rgba(255, 165, 0, 0.75)"}
-      // labelDotRadius={0.4}
-      // labelAltitude={0.05}
-      // hexPolygonsData={hex.features}
-      // hexPolygonResolution={3} //values higher than 3 makes it buggy
-      // hexPolygonMargin={0.62}
-      // hexPolygonColor={useCallback(() => "#1b66b1", [])}
-      // globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-      // bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-
       ref={globeEl}
-      animateIn={false}
+      backgroundColor="rgba(150,0,0,0)"
+      labelsData={GLOBE_DATA}
+      labelText={"label"}
+      labelSize={1.6}
+      labelColor={() => "rgba(255, 165, 0, 0.75)"}
+      labelDotRadius={0.4}
+      labelAltitude={0.05}
+      hexPolygonsData={hex.features}
+      hexPolygonResolution={3} //values higher than 3 makes it buggy
+      hexPolygonMargin={0.62}
+      hexPolygonColor={useCallback(() => "#1b66b1", [])}
       globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
       bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+
+      // ref={globeEl}
+      // animateIn={false}
+      // globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+      // bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
     />
   );
 }
